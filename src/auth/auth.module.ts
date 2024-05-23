@@ -1,4 +1,4 @@
-import { InternalServerErrorException, Module } from '@nestjs/common'
+import { InternalServerErrorException, Logger, Module } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
 import { JwtModule } from '@nestjs/jwt'
 import { PassportModule } from '@nestjs/passport'
@@ -18,10 +18,16 @@ import { Env } from 'src/env'
           throw new InternalServerErrorException('JWT keys are not defined in the environment variables')
         }
 
+        Logger.log(`Private key: ${privateKey.slice(0, 30)}...`)
+        Logger.log(`Public key: ${publicKey.slice(0, 30)}...`)
+
         return {
           signOptions: { algorithm: 'RS256' },
-          privateKey: Buffer.from(privateKey, 'base64'),
-          publicKey: Buffer.from(publicKey, 'base64'),
+          privateKey: privateKey,
+          publicKey: privateKey,
+          verifyOptions: {
+            algorithms: ['RS256']
+          },
         }
       },
     })
