@@ -12,11 +12,11 @@ const createAccountBodySchema = z.object({
 
 type CreateAccountBodySchema = z.infer<typeof createAccountBodySchema>
 
-@Controller()
+@Controller('/accounts')
 export class CreateAccountController {
   constructor(private prisma: PrismaService) {}
 
-  @Post('/accounts')
+  @Post()
   @HttpCode(201)
   @UsePipes(new ZodValidationPipe(createAccountBodySchema))
   async handle(@Body() body: CreateAccountBodySchema) {
